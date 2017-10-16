@@ -28,8 +28,10 @@ LIBFT_DIR			=	libft/
 LIBFT_LIB			=	$(LIBFT_DIR)libft.a
 
 SRCBASE_DUREX	=	\
-					main.c
-
+					main.c							\
+					durex.c							\
+					env.c							\
+					utils.c
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_DUREX			=	$(addprefix $(SRCDIR_DUREX), $(SRCBASE_DUREX))

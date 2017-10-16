@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frmarinh <frmarinh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/16 21:07:42 by frmarinh          #+#    #+#             */
-/*   Updated: 2017/10/16 21:08:15 by frmarinh         ###   ########.fr       */
+/*   Created: 2017/10/16 23:38:34 by frmarinh          #+#    #+#             */
+/*   Updated: 2017/10/16 23:38:40 by frmarinh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-int		main(int argc, char **argv, char **env)
+int				get_random(int low, int high)
 {
-	t_durex		*durex = get_durex(env, FRAISE);
+   return rand() % (high - low + 1) + low;
+}
 
-	if (durex) {
-		srand(time(NULL));
-		if (getuid()) {
-			return (-1);
-		}
-		if (is_in_binary_path(durex)) {
-			printf("Hello, i'm in a binary path..\n");
-		} else {
-			infect_system(durex);
-		}
-		return (0);
-	} else {
-		return (-1);
+int				get_file_length(char *path)
+{
+	struct stat st;
+
+	if ((stat(path, &st)) != -1) {
+		return st.st_size;
 	}
+	return 0;
 }

@@ -20,11 +20,12 @@ static t_env			*alloc_env(char *key, char *value)
 	t_env	*new_chain = NULL;
 
 	if (!(new_chain = (t_env*)malloc(sizeof(struct s_env)))) {
-		return ;
+		return (NULL);
 	}
 	new_chain->key = (key) ? ft_strdup(key) : NULL;
 	new_chain->value = (value) ? ft_strdup(value) : NULL;
 	new_chain->next = NULL;
+	return (new_chain);
 }
 
 /*

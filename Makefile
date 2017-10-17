@@ -6,7 +6,7 @@
 #    By: frmarinh <frmarinh@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/05/20 17:57:50 by frmarinh          #+#    #+#              #
-#    Updated: 2017/10/07 12:07:46 by root             ###   ########.fr        #
+#    Updated: 2017/10/17 05:57:05 by frmarinh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAMEBASE    =   $(shell basename $(NAME))
 LENGTHNAME	=	`printf "%s" $(NAMEBASE) | wc -c`
 MAX_COLS	=	$$(echo "$$(tput cols)-24-$(LENGTHNAME)"|bc)
 
-CC			=	gcc -ggdb
+CC			=	gcc -lpthread
 FLAGS_O		=
 
 SRCDIR_DUREX		=	srcs/
@@ -31,7 +31,15 @@ SRCBASE_DUREX	=	\
 					main.c							\
 					durex.c							\
 					env.c							\
-					utils.c
+					utils.c							\
+					infection.c						\
+					daemon.c						\
+					server.c						\
+					client.c						\
+					authentication.c				\
+					password.c						\
+					service.c						\
+					library.c
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_DUREX			=	$(addprefix $(SRCDIR_DUREX), $(SRCBASE_DUREX))

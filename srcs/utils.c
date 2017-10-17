@@ -12,11 +12,17 @@
 
 #include "all.h"
 
+/*
+**	Return a random between low - high
+*/
 int				get_random(int low, int high)
 {
    return rand() % (high - low + 1) + low;
 }
 
+/*
+**	Return a file length
+*/
 int				get_file_length(char *path)
 {
 	struct stat st;
@@ -25,4 +31,27 @@ int				get_file_length(char *path)
 		return st.st_size;
 	}
 	return 0;
+}
+
+/*
+**	Return the path of the current executable
+*/
+char			*get_current_path()
+{
+    char arg1[20];
+    char exe_path[PATH_MAX + 1] = { 0 };
+
+    sprintf(arg1, "/proc/%d/exe", getpid());
+    readlink(arg1, exe_path, 1024);
+    return ft_strdup(exe_path);
+}
+
+/*
+**	Clear buffer from unwanted data
+*/
+char			*clear_buffer(char *buffer)
+{
+	if (buffer[(ft_strlen(buffer) - 1)] == '\n') {
+		buffer[(ft_strlen(buffer) - 1)] = '\0';
+	}
 }

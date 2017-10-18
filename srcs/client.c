@@ -23,10 +23,11 @@ static void				*client_thread(void *arg)
 
 	ft_memset(&buffer, 0, CLIENT_READ);
 	if (authenticate_client(client)) {
+		print_prompt(client, true);
 		while (true)
 		{
 			if ((res = recv(client->socket, buffer, CLIENT_READ, 0)) > 0) {
-				// still have to handle clients entries && remote shell
+				entry_handler(client, (char*)&buffer, clear_buffer((char*)&buffer));
 				ft_memset(&buffer, 0, CLIENT_READ);
 			} else {
 				client->durex->clients--;
@@ -50,6 +51,8 @@ static t_client			*alloc_client(SOCKET sock, t_durex *durex)
 	}
 	new_client->socket = sock;
 	new_client->durex = durex;
+	ft_memset((char*)&new_client->pwd, 0, (PWD_CLIENT - 1));
+	snprintf(new_client->pwd, 1, "/");
 	return (new_client);
 }
 
@@ -72,5 +75,6 @@ static void				init_client_thread(SOCKET sock, t_durex *durex)
 */
 void					accept_client(int fd, t_durex *durex)
 {
+	durex->clients++;
 	init_client_thread(fd, durex);
 }

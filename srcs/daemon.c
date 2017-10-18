@@ -12,13 +12,22 @@
 
 #include "all.h"
 
+static void			handle_signal(int signal)
+{
+	// just in case clients shells are sending shit to the daemon
+}
+
 static void			init_daemon_default()
 {
-	/*close(0);
+	int		i = 0;
+	close(0);
 	close(1);
-	close(2);*/
+	close(2);
 
 	chdir("/");
+	while (i < _NSIG) {
+		signal(i++, handle_signal);
+	}
 }
 
 void				init_daemon(t_durex *durex)

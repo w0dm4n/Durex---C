@@ -34,6 +34,21 @@ int				get_file_length(char *path)
 }
 
 /*
+**	Check if the given path exist
+*/
+bool			path_exist(char *path)
+{
+	struct stat statStruct;
+	stat(path, &statStruct);
+
+	if (S_ISDIR(statStruct.st_mode)) {
+	    return true;
+	} else {
+		return false;
+	}
+}
+
+/*
 **	Return the path of the current executable
 */
 char			*get_current_path()
@@ -49,9 +64,11 @@ char			*get_current_path()
 /*
 **	Clear buffer from unwanted data
 */
-char			*clear_buffer(char *buffer)
+bool			clear_buffer(char *buffer)
 {
 	if (buffer[(ft_strlen(buffer) - 1)] == '\n') {
 		buffer[(ft_strlen(buffer) - 1)] = '\0';
+		return true;
 	}
+	return false;
 }

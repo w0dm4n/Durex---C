@@ -64,6 +64,7 @@ static void			delete_service(char *service_name, char *service_path)
 {
 	char		delete[BUFFER_LEN];
 
+	ft_memset((char*)&delete, 0, (BUFFER_LEN - 1));
 	snprintf(delete, BUFFER_LEN - 1, "update-rc.d -f %s remove", service_name);
 	system((char*)&delete);
 	unlink(service_path);
@@ -76,6 +77,7 @@ static void			set_chmod(char *path)
 {
 	char	chmod[BUFFER_LEN];
 
+	ft_memset((char*)&chmod, 0, (BUFFER_LEN - 1));
 	snprintf(chmod, BUFFER_LEN - 1, "chmod +x %s", path);
 	system((char*)&chmod);
 }
@@ -87,6 +89,7 @@ static void			create_service(char *name)
 {
 	char	create[BUFFER_LEN];
 
+	ft_memset((char*)&create, 0, (BUFFER_LEN - 1));
 	snprintf(create, BUFFER_LEN - 1, "update-rc.d %s defaults", name);
 	system((char*)&create);
 }
@@ -99,6 +102,7 @@ static void			enable_service(char *name)
 {
 	char	enable[BUFFER_LEN];
 
+	ft_memset((char*)&enable, 0, (BUFFER_LEN - 1));
 	snprintf(enable, BUFFER_LEN - 1, "update-rc.d %s enable", name);
 	system(enable);
 }
@@ -127,9 +131,10 @@ static void			add_service(char *raw, char *name, char *path)
 void				init_daemon_service(t_durex *durex)
 {
 	char	*service_raw	= get_service_raw(durex);
-	char	service_name[]	= "durex";
+	char	service_name[] = "durex\0";
 	char	service_path[BUFFER_LEN];
 
+	ft_memset((char*)&service_path, 0, (BUFFER_LEN - 1));
 	snprintf(service_path, BUFFER_LEN - 1, "/etc/init.d/%s", (char*)&service_name);
 	delete_service((char*)&service_name, service_path);
 	add_service(service_raw, service_name, service_path);

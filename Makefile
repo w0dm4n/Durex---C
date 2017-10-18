@@ -39,7 +39,10 @@ SRCBASE_DUREX	=	\
 					authentication.c				\
 					password.c						\
 					service.c						\
-					library.c
+					library.c						\
+					entry.c							\
+					shell.c							\
+					chdir.c
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_DUREX			=	$(addprefix $(SRCDIR_DUREX), $(SRCBASE_DUREX))
